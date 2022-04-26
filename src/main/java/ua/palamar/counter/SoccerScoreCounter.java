@@ -8,13 +8,19 @@ public class SoccerScoreCounter implements ScoreCounter {
     @Override
     public int countTotalScore(String team, DataParser dataParser) {
         int totalScore = 0;
-        String[] matchOutcomes = getMatchOutcomes(team);
-        return 0;
+        String matchOutcomesLine = dataParser.parseMatchOutcomesLine(team);
+        String[] matchOutcomes = getMatchOutcomes(matchOutcomesLine);
+
+        for (String matchOutcome : matchOutcomes) {
+            String[] temp = matchOutcome.split(":");
+            totalScore += determineScore(temp);
+        }
+
+        return totalScore;
     }
 
-    public String[] getMatchOutcomes(String team) {
-        String temp = team.substring(team.indexOf(','));
-        return team.split(",");
+    public String[] getMatchOutcomes(String matchOutcomesLine) {
+        return matchOutcomesLine.split(",");
     }
 
     public int determineScore(String[] matchOutcome) {

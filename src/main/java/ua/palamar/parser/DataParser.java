@@ -2,8 +2,8 @@ package ua.palamar.parser;
 
 public interface DataParser {
 
-    String getName(String team);
+    String parseName(String team);
 
-    String getMatchOutcomes(String team);
+    String parseMatchOutcomesLine(String team);
 
 }
