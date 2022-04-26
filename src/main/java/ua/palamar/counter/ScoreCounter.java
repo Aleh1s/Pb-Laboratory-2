@@ -1,7 +1,9 @@
 package ua.palamar.counter;
 
+import ua.palamar.parser.DataParser;
+
 public interface ScoreCounter {
 
-    int countTotalScore(String[] matchOutcomes);
+    int countTotalScore(String team, DataParser dataParser);
 
 }

@@ -23,12 +23,14 @@ public class SoccerTableBuilder implements TableBuilder {
         StringBuilder temp = new StringBuilder();
 
         for (String team : teams) {
-
+            push(team, temp);
         }
-        return null;
+
+        return temp.toString();
     }
 
-//    public void push(String team, StringBuilder temp) {
-//        String teamName =
-//    }
+    public void push(String team, StringBuilder temp) {
+        String teamName = dataParser.getName(team);
+        int totalScore = scoreCounter.countTotalScore(team, dataParser);
+    }
 }
