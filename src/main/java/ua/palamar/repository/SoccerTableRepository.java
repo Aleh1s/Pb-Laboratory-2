@@ -28,16 +28,31 @@ public class SoccerTableRepository implements TableRepository {
 
     @Override
     public void saveTable(File dir, String table) {
-//        File result =
-//
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter()));
+        File result = createResultFile(dir);
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(result))) {
+            writer.write(table);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int countTeams(String row) {
         return Integer.parseInt(row);
     }
 
-//    public File createResultFile(File dir) {
-//
-//    }
+    public File createResultFile(File dir) {
+        File resultFile = new File(dir, "result.csv");
+
+        if (resultFile.exists())
+            return resultFile;
+
+        try {
+            resultFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return resultFile;
+    }
 }
