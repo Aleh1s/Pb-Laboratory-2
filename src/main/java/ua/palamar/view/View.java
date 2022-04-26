@@ -72,6 +72,6 @@ public class View {
 
     public void displayAbsolutePathToResultFile() {
         File file = new File(this.dir, "result.csv");
-        System.out.println(file.getAbsolutePath());
+        System.out.printf("Path to your result file is %s", file.getAbsolutePath());
     }
 }

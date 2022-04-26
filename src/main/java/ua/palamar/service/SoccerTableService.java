@@ -25,6 +25,7 @@ public class SoccerTableService implements TableService{
 
     @Override
     public void exportResultTable() {
+        deleteResultFileIfExists();
         File[] files = dir.listFiles();
         ResultTableList resultTableList = new ResultTableList();
 
@@ -35,5 +36,10 @@ public class SoccerTableService implements TableService{
         }
 
         tableRepository.saveTable(dir, resultTableList.concatAll());
+    }
+
+    public void deleteResultFileIfExists() {
+        File result = new File(dir, "result.csv");
+        if (result.exists()) result.delete();
     }
 }
