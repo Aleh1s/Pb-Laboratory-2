@@ -18,8 +18,7 @@ public class SoccerTableBuilder implements TableBuilder {
     }
 
     @Override
-    public String buildResultTable(File table, TableRepository tableRepository) {
-        String[] teams = tableRepository.getTeamsFromTable(table);
+    public String buildResultTable(String[] teams) {
         StringBuilder temp = new StringBuilder();
 
         for (String team : teams) {
@@ -33,6 +32,6 @@ public class SoccerTableBuilder implements TableBuilder {
         String teamName = dataParser.parseName(team);
         int totalScore = scoreCounter.countTotalScore(team, dataParser);
 
-        temp.append(teamName).append(",").append("\r\n");
+        temp.append(teamName).append(",").append(totalScore).append("\r\n");
     }
 }

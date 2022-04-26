@@ -25,13 +25,15 @@ public class SoccerTableService implements TableService{
 
     @Override
     public void exportResultTable() {
-        File[] tables = dir.listFiles();
+        File[] files = dir.listFiles();
         ResultTableList resultTableList = new ResultTableList();
 
-        for (File table: tables) {
-            resultTableList.add(tableBuilder.buildResultTable(table, tableRepository));
+        for (File file: files) {
+            String[] teams = tableRepository.getTeamsFromTable(file);
+            String resultTable = tableBuilder.buildResultTable(teams);
+            resultTableList.add(resultTable);
         }
 
+        tableRepository.saveTable(dir, resultTableList.concatAll());
     }
-
 }

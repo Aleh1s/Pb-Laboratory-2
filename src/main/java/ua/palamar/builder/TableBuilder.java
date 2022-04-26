@@ -6,6 +6,6 @@ import java.io.File;
 
 public interface TableBuilder {
 
-    String buildResultTable(File table, TableRepository tableRepository);
+    String buildResultTable(String[] teams);
 
 }

@@ -6,5 +6,5 @@ public interface TableRepository {
 
     String[] getTeamsFromTable(File table);
 
-    void saveTable(File dir);
+    void saveTable(File dir, String table);
 }

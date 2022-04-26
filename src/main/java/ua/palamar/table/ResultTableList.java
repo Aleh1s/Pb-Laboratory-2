@@ -16,6 +16,8 @@ public class ResultTableList {
 
         for (String table : tables) stringBuilder.append(table);
 
-        return stringBuilder.toString();
+        String resultTable = stringBuilder.toString();
+
+        return resultTable.substring(0, resultTable.length() - 2);
     }
 }
