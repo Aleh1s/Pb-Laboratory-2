@@ -2,9 +2,6 @@ package ua.palamar.builder;
 
 import ua.palamar.counter.ScoreCounter;
 import ua.palamar.parser.DataParser;
-import ua.palamar.repository.TableRepository;
-
-import java.io.File;
 
 public class SoccerTableBuilder implements TableBuilder {
 

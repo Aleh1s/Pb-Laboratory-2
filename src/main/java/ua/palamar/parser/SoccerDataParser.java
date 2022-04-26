@@ -8,6 +8,6 @@ public class SoccerDataParser implements DataParser {
 
     @Override
     public String parseMatchOutcomesLine(String team) {
-        return team.substring(team.indexOf(','));
+        return team.substring(team.indexOf(',') + 1);
     }
 }
