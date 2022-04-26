@@ -3,7 +3,7 @@ package ua.palamar.table;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableList {
+public class ResultTableList {
 
     private final List<String> tables = new ArrayList<>();
 

@@ -2,10 +2,7 @@ package ua.palamar.service;
 
 import java.io.File;
 
-public class TableService {
+public interface TableService {
 
-    public void exportResultTable(File dir) {
-
-    }
-
+    void exportResultTable();
 }
