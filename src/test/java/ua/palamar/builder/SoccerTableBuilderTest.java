@@ -32,5 +32,16 @@ public class SoccerTableBuilderTest extends TestCase {
 
     @Test
     public void testPush() {
+        // given
+        StringBuilder givenSB = new StringBuilder();
+        String givenStr = "Real,1:1,2:1,0:1";
+        String expected = "Real,4\r\n";
+
+        // when
+        soccerTableBuilder.push(givenStr, givenSB);
+        String actual = givenSB.toString();
+
+        // then
+        assertEquals(expected, actual);
     }
 }

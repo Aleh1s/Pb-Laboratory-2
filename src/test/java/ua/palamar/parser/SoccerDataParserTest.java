@@ -3,9 +3,6 @@ package ua.palamar.parser;
 import junit.framework.TestCase;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-
 public class SoccerDataParserTest extends TestCase {
 
     private final SoccerDataParser soccerDataParser = new SoccerDataParser();
