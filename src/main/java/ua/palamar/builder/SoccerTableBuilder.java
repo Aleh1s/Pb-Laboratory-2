@@ -32,5 +32,7 @@ public class SoccerTableBuilder implements TableBuilder {
     public void push(String team, StringBuilder temp) {
         String teamName = dataParser.parseName(team);
         int totalScore = scoreCounter.countTotalScore(team, dataParser);
+
+        temp.append(teamName).append(",").append("\r\n");
     }
 }
