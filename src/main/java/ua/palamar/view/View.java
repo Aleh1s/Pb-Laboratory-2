@@ -35,22 +35,7 @@ public class View {
 
         File dir = new File(scanner.nextLine());
 
-        validateDir(dir);
-
         this.dir = dir;
-    }
-
-    public static void validateDir(File dir) {
-
-
-        if (!dir.exists()) {
-            throw new RuntimeException("Directory does not exist");
-        }
-
-        if (dir.list() == null) {
-            throw new RuntimeException("Directory is empty");
-        }
-
     }
 
     public void executeTableExporting() {

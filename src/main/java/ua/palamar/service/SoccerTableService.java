@@ -25,6 +25,7 @@ public class SoccerTableService implements TableService{
 
     @Override
     public void exportResultTable() {
+        validateDir(dir);
         deleteResultFileIfExists();
         File[] files = dir.listFiles();
         ResultTableList resultTableList = new ResultTableList();
@@ -38,6 +39,16 @@ public class SoccerTableService implements TableService{
         tableRepository.saveTable(dir, resultTableList.concatAll());
     }
 
+    public static void validateDir(File dir) {
+        if (!dir.exists()) {
+            throw new RuntimeException("Directory does not exist");
+        }
+
+        if (dir.list() == null) {
+            throw new RuntimeException("Directory is empty");
+        }
+    }
+    
     public void deleteResultFileIfExists() {
         File result = new File(dir, "result.csv");
         if (result.exists()) result.delete();
