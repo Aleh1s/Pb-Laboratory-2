@@ -1,13 +1,13 @@
 package ua.palamar.service;
 
-import ua.palamar.builder.SoccerTableBuilder;
 import ua.palamar.builder.TableBuilder;
-import ua.palamar.counter.ScoreCounter;
-import ua.palamar.parser.DataParser;
+import ua.palamar.file.FileValidatorImpl;
 import ua.palamar.repository.TableRepository;
 import ua.palamar.table.ResultTableList;
 
 import java.io.File;
+
+import static ua.palamar.file.FileValidatorImpl.*;
 
 public class SoccerTableService implements TableService{
 
@@ -25,8 +25,10 @@ public class SoccerTableService implements TableService{
 
     @Override
     public void exportResultTable() {
-        validateDir(dir);
-        deleteResultFileIfExists();
+        directoryExists(dir);
+        directoryIsNotEmpty(dir);
+        directoryHasOnlyCsvFiles(dir);
+        deleteFileIfExists(dir, "result.csv");
         File[] files = dir.listFiles();
         ResultTableList resultTableList = new ResultTableList();
 
@@ -37,20 +39,5 @@ public class SoccerTableService implements TableService{
         }
 
         tableRepository.saveTable(dir, resultTableList.concatAll());
-    }
-
-    public static void validateDir(File dir) {
-        if (!dir.exists()) {
-            throw new RuntimeException("Directory does not exist");
-        }
-
-        if (dir.list() == null) {
-            throw new RuntimeException("Directory is empty");
-        }
-    }
-    
-    public void deleteResultFileIfExists() {
-        File result = new File(dir, "result.csv");
-        if (result.exists()) result.delete();
     }
 }
