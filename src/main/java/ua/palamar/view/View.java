@@ -21,7 +21,7 @@ public class View {
                |  |    \\ '-'  | | `-' | |  | \\   --.   |  | |  | | '-' ' | '-' ' |  | |  | \\ `--. \\ '-'  |   |  |   |  | ' '-' ' |  ||  |\s
                `--'     `--`--'  `---'  `--'  `----'   `--' `--' |  |-'  |  |-'  `--' `--'  `---'  `--`--'   `--'   `--'  `---'  `--''--'\s
                                                                  `--'    `--'                                                            \s
-            Table Application 1.0
+            Table Application v1.0
             Developed by Oleksandr Palamarchuk
             """;
 

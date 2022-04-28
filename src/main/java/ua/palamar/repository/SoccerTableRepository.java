@@ -7,18 +7,16 @@ public class SoccerTableRepository implements TableRepository {
 
     @Override
     public String[] getTeamsFromTable(File file) {
-        String[] teams = null;
+        String[] teams;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String row;
-            for (int i = 0; (row = reader.readLine()) != null; i++) {
-                if (i == 0) {
-                    int size = countTeams(row);
-                    teams = new String[size];
-                } else {
-                    teams[i - 1] = row;
-                }
+            int size = countTeams(reader.readLine());
+
+            teams = new String[size];
+            for (int i = 1; i < size + 1; i++) {
+                teams[i - 1] = reader.readLine();
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
