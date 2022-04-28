@@ -29,6 +29,7 @@ public class SoccerTableService implements TableService{
         directoryIsNotEmpty(dir);
         directoryHasOnlyCsvFiles(dir);
         deleteFileIfExists(dir, "result.csv");
+
         File[] files = dir.listFiles();
         ResultTableList resultTableList = new ResultTableList();
 

@@ -17,7 +17,7 @@ public class FileValidatorImpl {
     }
 
     public static void directoryIsNotEmpty(File dir) {
-        boolean isEmpty = dir.list() == null;
+        boolean isEmpty = dir.list().length == 0;
         if (isEmpty)
             throw new IllegalStateException("Directory is empty");
     }
