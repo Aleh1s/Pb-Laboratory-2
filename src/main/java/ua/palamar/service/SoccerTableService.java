@@ -1,26 +1,32 @@
 package ua.palamar.service;
 
+import ua.palamar.builder.SoccerTableBuilder;
 import ua.palamar.builder.TableBuilder;
-import ua.palamar.file.FileValidatorImpl;
+import ua.palamar.counter.ScoreCounter;
+import ua.palamar.parser.DataParser;
 import ua.palamar.repository.TableRepository;
 import ua.palamar.table.ResultTableList;
 
 import java.io.File;
 
-import static ua.palamar.file.FileValidatorImpl.*;
+import static ua.palamar.file.FileValidator.*;
 
 public class SoccerTableService implements TableService{
 
     private final File dir;
     private final TableRepository tableRepository;
-    private final TableBuilder tableBuilder;
+    private final DataParser dataParser;
+
+    private final ScoreCounter scoreCounter;
 
     public SoccerTableService(File dir,
                               TableRepository tableRepository,
-                              TableBuilder tableBuilder) {
+                              DataParser dataParser,
+                              ScoreCounter scoreCounter) {
         this.dir = dir;
         this.tableRepository = tableRepository;
-        this.tableBuilder = tableBuilder;
+        this.dataParser = dataParser;
+        this.scoreCounter = scoreCounter;
     }
 
     @Override
@@ -28,13 +34,14 @@ public class SoccerTableService implements TableService{
         directoryExists(dir);
         directoryIsNotEmpty(dir);
         directoryHasOnlyCsvFiles(dir);
-        deleteFileIfExists(dir, "result.csv");
+        resultFileExists(dir);
 
         File[] files = dir.listFiles();
         ResultTableList resultTableList = new ResultTableList();
+        TableBuilder tableBuilder = new SoccerTableBuilder(dataParser, scoreCounter);
 
         for (File file: files) {
-            String[] teams = tableRepository.getTeamsFromTable(file);
+            String[] teams = tableRepository.getTeamsFromTable(file, dataParser);
             String resultTable = tableBuilder.buildResultTable(teams);
             resultTableList.add(resultTable);
         }

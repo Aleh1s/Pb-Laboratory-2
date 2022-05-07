@@ -2,6 +2,10 @@ package ua.palamar.repository;
 
 import junit.framework.TestCase;
 import org.junit.Test;
+import ua.palamar.data.DataValidator;
+import ua.palamar.data.SoccerDataValidator;
+import ua.palamar.parser.DataParser;
+import ua.palamar.parser.SoccerDataParser;
 
 import java.io.File;
 
@@ -9,8 +13,10 @@ import static org.junit.Assert.assertArrayEquals;
 
 public class SoccerTableRepositoryTest extends TestCase {
 
+    private final DataValidator dataValidator = new SoccerDataValidator();
     private final SoccerTableRepository soccerTableRepository = new SoccerTableRepository();
 
+    private final DataParser dataParser = new SoccerDataParser(dataValidator);
     @Test
     public void testGetTeamsFromTable() {
         // given
@@ -21,7 +27,7 @@ public class SoccerTableRepositoryTest extends TestCase {
         };
 
         // when
-        String[] actual = soccerTableRepository.getTeamsFromTable(given);
+        String[] actual = soccerTableRepository.getTeamsFromTable(given, dataParser);
 
         // then
         assertArrayEquals(expected, actual);
@@ -36,7 +42,8 @@ public class SoccerTableRepositoryTest extends TestCase {
         // when
         soccerTableRepository.saveTable(dir, given);
         String[] actual = soccerTableRepository.getTeamsFromTable(
-                new File(dir.getPath() + "/result.csv")
+                new File(dir.getPath() + "/result.csv"),
+                dataParser
         );
 
         // then
@@ -49,7 +56,7 @@ public class SoccerTableRepositoryTest extends TestCase {
         int expected = 11;
 
         // when
-        int actual = soccerTableRepository.countTeams(given);
+        int actual = soccerTableRepository.countTeams(given, dataParser);
 
         // then
         assertEquals(expected, actual);

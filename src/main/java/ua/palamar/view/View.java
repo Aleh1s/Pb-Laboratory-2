@@ -1,7 +1,7 @@
 package ua.palamar.view;
 
-import ua.palamar.builder.SoccerTableBuilder;
 import ua.palamar.counter.SoccerScoreCounter;
+import ua.palamar.data.SoccerDataValidator;
 import ua.palamar.parser.SoccerDataParser;
 import ua.palamar.repository.SoccerTableRepository;
 import ua.palamar.service.SoccerTableService;
@@ -42,9 +42,11 @@ public class View {
         TableService tableService = new SoccerTableService(
                 this.dir,
                 new SoccerTableRepository(),
-                new SoccerTableBuilder(
-                        new SoccerDataParser(),
-                        new SoccerScoreCounter()
+                new SoccerDataParser(
+                        new SoccerDataValidator()
+                ),
+                new SoccerScoreCounter(
+                        new SoccerDataValidator()
                 )
         );
 

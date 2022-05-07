@@ -1,20 +1,23 @@
 package ua.palamar.repository;
 
+import ua.palamar.file.FileValidator;
+import ua.palamar.parser.DataParser;
+
 import java.io.*;
 
 public class SoccerTableRepository implements TableRepository {
 
 
     @Override
-    public String[] getTeamsFromTable(File file) {
+    public String[] getTeamsFromTable(File file, DataParser dataParser) {
         String[] teams;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            int size = countTeams(reader.readLine());
+            int size = countTeams(reader.readLine(), dataParser);
 
             teams = new String[size];
-            for (int i = 1; i < size + 1; i++) {
-                teams[i - 1] = reader.readLine();
+            for (int i = 0; i < size; i++) {
+                teams[i] = reader.readLine();
             }
 
         } catch (IOException e) {
@@ -30,20 +33,18 @@ public class SoccerTableRepository implements TableRepository {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(result))) {
             writer.write(table);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public int countTeams(String row) {
-        return Integer.parseInt(row);
+    public int countTeams(String row, DataParser dataParser) {
+        return dataParser.parseInteger(row);
     }
 
     public File createResultFile(File dir) {
         File resultFile = new File(dir, "result.csv");
-
-        if (resultFile.exists())
-            return resultFile;
 
         try {
             resultFile.createNewFile();

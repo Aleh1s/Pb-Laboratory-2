@@ -1,12 +1,11 @@
 package ua.palamar.service;
 
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
-import ua.palamar.builder.SoccerTableBuilder;
-import ua.palamar.builder.TableBuilder;
 import ua.palamar.counter.ScoreCounter;
 import ua.palamar.counter.SoccerScoreCounter;
+import ua.palamar.data.DataValidator;
+import ua.palamar.data.SoccerDataValidator;
 import ua.palamar.parser.DataParser;
 import ua.palamar.parser.SoccerDataParser;
 import ua.palamar.repository.SoccerTableRepository;
@@ -16,12 +15,12 @@ import java.io.File;
 
 public class SoccerTableServiceTest extends TestCase {
 
+    private DataValidator dataValidator = new SoccerDataValidator();
     private final File dir = new File("src/test/resources/dir");
     private final TableRepository tableRepository = new SoccerTableRepository();
-    private final DataParser dataParser = new SoccerDataParser();
-    private final ScoreCounter scoreCounter = new SoccerScoreCounter();
-    private final TableBuilder tableBuilder = new SoccerTableBuilder(dataParser, scoreCounter);
-    private final SoccerTableService soccerTableService = new SoccerTableService(dir, tableRepository, tableBuilder);
+    private final DataParser dataParser = new SoccerDataParser(dataValidator);
+    private final ScoreCounter scoreCounter = new SoccerScoreCounter(dataValidator);
+    private final SoccerTableService soccerTableService = new SoccerTableService(dir, tableRepository, dataParser, scoreCounter);
 
     @Test
     public void testExportResultTable() {

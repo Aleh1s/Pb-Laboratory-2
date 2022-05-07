@@ -4,13 +4,16 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import ua.palamar.counter.ScoreCounter;
 import ua.palamar.counter.SoccerScoreCounter;
+import ua.palamar.data.DataValidator;
+import ua.palamar.data.SoccerDataValidator;
 import ua.palamar.parser.DataParser;
 import ua.palamar.parser.SoccerDataParser;
 
 public class SoccerTableBuilderTest extends TestCase {
 
-    private final DataParser dataParser = new SoccerDataParser();
-    private final ScoreCounter scoreCounter = new SoccerScoreCounter();
+    private final DataValidator dataValidator = new SoccerDataValidator();
+    private final DataParser dataParser = new SoccerDataParser(dataValidator);
+    private final ScoreCounter scoreCounter = new SoccerScoreCounter(dataValidator);
     private final SoccerTableBuilder soccerTableBuilder = new SoccerTableBuilder(dataParser, scoreCounter);
 
     @Test

@@ -3,23 +3,21 @@ package ua.palamar.file;
 import java.io.File;
 import java.util.Objects;
 
-public class FileValidatorImpl {
-
-    public static void fileExists(File dir, String filename) {
-        File file = new File(dir, filename);
-        if (!file.exists())
-            throw new IllegalStateException("File does not exist");
-    }
+public class FileValidator {
 
     public static void directoryExists(File dir) {
         if (!dir.exists())
-            throw new IllegalStateException("Directory does not exist");
+            throw new RuntimeException(
+                    String.format("Directory %s does not exist", dir.getName())
+            );
     }
 
     public static void directoryIsNotEmpty(File dir) {
         boolean isEmpty = dir.list().length == 0;
         if (isEmpty)
-            throw new IllegalStateException("Directory is empty");
+            throw new RuntimeException(
+                    String.format("Directory %s is empty", dir.getName())
+            );
     }
 
     public static void directoryHasOnlyCsvFiles(File dir) {
@@ -28,16 +26,21 @@ public class FileValidatorImpl {
             String[] temp = file.split("\\.");
             String endOfFile = temp[temp.length - 1];
             if (!Objects.equals(endOfFile, "csv")) {
-                throw new IllegalStateException(
+                throw new RuntimeException(
                         String.format("File in directory has .%s format but should be .csv", endOfFile)
                 );
             }
         }
     }
 
-    public static void deleteFileIfExists(File dir, String filename) {
-        File result = new File(dir, filename);
-        if (result.exists()) result.delete();
+    public static void resultFileExists(File dir) {
+        File file = new File(dir, "result.csv");
+
+        if (file.exists()) {
+            throw new RuntimeException(
+                String.format("Result file exists in %s", dir.getPath())
+            );
+        }
     }
 
 }

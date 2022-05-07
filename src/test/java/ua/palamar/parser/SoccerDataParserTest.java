@@ -2,10 +2,13 @@ package ua.palamar.parser;
 
 import junit.framework.TestCase;
 import org.junit.Test;
+import ua.palamar.data.DataValidator;
+import ua.palamar.data.SoccerDataValidator;
 
 public class SoccerDataParserTest extends TestCase {
 
-    private final SoccerDataParser soccerDataParser = new SoccerDataParser();
+    private final DataValidator dataValidator = new SoccerDataValidator();
+    private final SoccerDataParser soccerDataParser = new SoccerDataParser(dataValidator);
 
     @Test
     public void testParseName() {

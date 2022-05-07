@@ -6,4 +6,7 @@ public interface DataParser {
 
     String parseMatchOutcomesLine(String team);
 
+    Integer parseInteger(String str);
+
+
 }

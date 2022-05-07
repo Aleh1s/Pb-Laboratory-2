@@ -2,6 +2,8 @@ package ua.palamar.counter;
 
 import junit.framework.TestCase;
 import org.junit.Test;
+import ua.palamar.data.DataValidator;
+import ua.palamar.data.SoccerDataValidator;
 import ua.palamar.parser.DataParser;
 import ua.palamar.parser.SoccerDataParser;
 
@@ -9,12 +11,14 @@ import static org.junit.Assert.assertArrayEquals;
 
 public class SoccerScoreCounterTest extends TestCase {
 
-    private final SoccerScoreCounter soccerScoreCounter = new SoccerScoreCounter();
+    private final DataParser dataParser = new SoccerDataParser(dataValidator);
+    private final DataValidator dataValidator = new SoccerDataValidator();
+    private final SoccerScoreCounter soccerScoreCounter = new SoccerScoreCounter(dataValidator);
 
     @Test
     public void testCountTotalScore() {
         // given
-        DataParser dataParser = new SoccerDataParser();
+        DataParser dataParser = new SoccerDataParser(dataValidator);
         String given = "Real Madrid,1:1,2:2,4:3";
         int expected = 5;
 
@@ -48,9 +52,9 @@ public class SoccerScoreCounterTest extends TestCase {
         int expectedDraw = 1;
 
         // when
-        int actualWin = soccerScoreCounter.determineScore(win);
-        int actualLoose = soccerScoreCounter.determineScore(loose);
-        int actualDraw = soccerScoreCounter.determineScore(draw);
+        int actualWin = soccerScoreCounter.determineScore(win, dataParser);
+        int actualLoose = soccerScoreCounter.determineScore(loose, dataParser);
+        int actualDraw = soccerScoreCounter.determineScore(draw, dataParser);
 
         // then
         assertEquals(expectedWin, actualWin);

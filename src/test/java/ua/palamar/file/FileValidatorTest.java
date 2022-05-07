@@ -6,7 +6,7 @@ import java.io.File;
 
 public class FileValidatorTest extends TestCase {
 
-    private final FileValidatorImpl fileValidator = new FileValidatorImpl();
+    private final FileValidator fileValidator = new FileValidator();
 
     public void testDirectoryHasOnlyCsvFiles() {
         // given
