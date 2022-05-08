@@ -11,16 +11,16 @@ import static org.junit.Assert.assertArrayEquals;
 
 public class SoccerScoreCounterTest extends TestCase {
 
-    private final DataParser dataParser = new SoccerDataParser(dataValidator);
     private final DataValidator dataValidator = new SoccerDataValidator();
+    private final DataParser dataParser = new SoccerDataParser(dataValidator);
     private final SoccerScoreCounter soccerScoreCounter = new SoccerScoreCounter(dataValidator);
 
     @Test
     public void testCountTotalScore() {
         // given
         DataParser dataParser = new SoccerDataParser(dataValidator);
-        String given = "Real Madrid,1:1,2:2,4:3";
-        int expected = 5;
+        String given = "AFC Bournemouth,4:4,1:1,0:0,3:2,4:2,3:0,0:0,2:1,4:2,4:3";
+        int expected = 22;
 
         // when
         int actual = soccerScoreCounter.countTotalScore(given, dataParser);

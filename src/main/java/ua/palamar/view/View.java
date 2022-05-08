@@ -53,12 +53,25 @@ public class View {
         tableService.exportResultTable();
     }
 
-    public static void displayFakeLoading() {
-        System.out.println("Exporting...");
+    public void startExecuting() {
+        Thread thread = new Thread(this::executeTableExporting);
+        thread.start();
+
+        do {
+
+            ProgressBar.refreshBar();
+
+            try {
+                thread.join(250);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        } while (thread.isAlive());
     }
 
     public void displayAbsolutePathToResultFile() {
         File file = new File(this.dir, "result.csv");
-        System.out.printf("Path to your result file is %s", file.getAbsolutePath());
+        System.out.printf("Path to your result file is %s\n", file.getAbsolutePath());
     }
 }

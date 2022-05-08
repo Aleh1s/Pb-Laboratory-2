@@ -7,8 +7,7 @@ public class Main {
         View view = new View();
         View.displayTitle();
         view.setDirectory();
-        view.executeTableExporting();
-        View.displayFakeLoading();
+        view.startExecuting();
         view.displayAbsolutePathToResultFile();
     }
 }

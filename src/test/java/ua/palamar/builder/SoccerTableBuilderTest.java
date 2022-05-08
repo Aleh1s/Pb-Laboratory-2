@@ -20,10 +20,26 @@ public class SoccerTableBuilderTest extends TestCase {
     public void testBuildResultTable() {
         // given
         String[] given = new String[]{
-                "Real,1:2,1:1",
-                "Barcelona,1:1,3:1"
+                "AFC Bournemouth,4:4,1:1,0:0,3:2,4:2,3:0,0:0,2:1,4:2,4:3",
+                "Arsenal,3:1,2:3,2:3,4:3,0:1,1:2,1:0,1:4,0:2,2:4",
+                "Burnley,3:1,4:0,3:1,3:2,2:2,0:1,3:4,3:3,2:3,1:1",
+                "Chelsea,3:0,3:0,3:0,2:2,0:4,3:0,0:4,3:4,2:2,4:1",
+                "Crystal Palace,0:0,1:2,4:1,3:4,2:2,2:1,3:3,2:1,4:3,4:0",
+                "Everton,4:1,3:0,0:0,3:0,4:3,1:4,4:0,3:3,4:0,4:1",
+                "Hull City,2:3,4:1,2:4,4:3,3:2,2:2,1:3,4:0,0:3,0:1",
+                "Leicester City,0:1,1:1,2:3,1:2,1:0,4:2,3:2,3:2,4:3,3:3",
+                "Liverpool,0:0,4:0,1:1,1:2,1:1,4:4,0:4,2:2,4:2,3:12"
         };
-        String expected = "Real,1\r\nBarcelona,4\r\n";
+        String expected =
+                "AFC Bournemouth,22\r\n" +
+                        "Arsenal,9\r\n" +
+                        "Burnley,15\r\n" +
+                        "Chelsea,17\r\n" +
+                        "Crystal Palace,18\r\n" +
+                        "Everton,23\r\n" +
+                        "Hull City,13\r\n" +
+                        "Leicester City,17\r\n" +
+                        "Liverpool,11\r\n";
 
         // when
         String actual = soccerTableBuilder.buildResultTable(given);
@@ -37,8 +53,8 @@ public class SoccerTableBuilderTest extends TestCase {
     public void testPush() {
         // given
         StringBuilder givenSB = new StringBuilder();
-        String givenStr = "Real,1:1,2:1,0:1";
-        String expected = "Real,4\r\n";
+        String givenStr = "AFC Bournemouth,4:4,1:1,0:0,3:2,4:2,3:0,0:0,2:1,4:2,4:3";
+        String expected = "AFC Bournemouth,22\r\n";
 
         // when
         soccerTableBuilder.push(givenStr, givenSB);
