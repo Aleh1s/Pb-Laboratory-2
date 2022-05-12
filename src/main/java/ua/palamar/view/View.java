@@ -1,6 +1,7 @@
 package ua.palamar.view;
 
 import ua.palamar.counter.SoccerScoreCounter;
+import ua.palamar.data.DataValidator;
 import ua.palamar.data.SoccerDataValidator;
 import ua.palamar.parser.SoccerDataParser;
 import ua.palamar.repository.SoccerTableRepository;
@@ -39,14 +40,15 @@ public class View {
     }
 
     public void executeTableExporting() {
+        DataValidator dataValidator = new SoccerDataValidator();
         TableService tableService = new SoccerTableService(
                 this.dir,
                 new SoccerTableRepository(),
                 new SoccerDataParser(
-                        new SoccerDataValidator()
+                        dataValidator
                 ),
                 new SoccerScoreCounter(
-                        new SoccerDataValidator()
+                        dataValidator
                 )
         );
 

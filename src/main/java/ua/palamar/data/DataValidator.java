@@ -6,6 +6,5 @@ public interface DataValidator {
     void matchOutcomeIsNotEmpty(String str);
     void isMatchOutcomeCorrect(String srt);
     void isScoreValid(int goalsScored, int goalsMissed);
-
     void isTeamNameValid(String str);
 }
