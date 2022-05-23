@@ -1,46 +1,42 @@
 package ua.palamar.file;
 
+import ua.palamar.notificator.ErrorNotificator;
+
 import java.io.File;
 import java.util.Objects;
 
 public class FileValidator {
 
-    public static void directoryExists(File dir) {
-        if (!dir.exists())
-            throw new RuntimeException(
-                    String.format("Directory %s does not exist", dir.getName())
-            );
-    }
-
-    public static void directoryIsNotEmpty(File dir) {
+    private static void directoryIsNotEmpty(File dir) {
         boolean isEmpty = dir.list().length == 0;
         if (isEmpty)
-            throw new RuntimeException(
-                    String.format("Directory %s is empty", dir.getName())
-            );
+            ErrorNotificator.getInstance().addError("Directory is empty", -1, -1, dir.getPath());
     }
 
-    public static void directoryHasOnlyCsvFiles(File dir) {
+    private static void directoryHasOnlyCsvFiles(File dir) {
         String[] files = dir.list();
         for (String file : files){
             String[] temp = file.split("\\.");
             String endOfFile = temp[temp.length - 1];
             if (!Objects.equals(endOfFile, "csv")) {
-                throw new RuntimeException(
-                        String.format("File in directory has .%s format but should be .csv", endOfFile)
-                );
+                ErrorNotificator.getInstance().addError("Directory must contains only scv files", -1, -1, dir.getPath());
             }
         }
     }
 
-    public static void resultFileExists(File dir) {
+    private static void resultFileExists(File dir) {
         File file = new File(dir, "result.csv");
 
         if (file.exists()) {
-            throw new RuntimeException(
-                String.format("Result file exists in %s", dir.getPath())
-            );
+            ErrorNotificator.getInstance().addError("The result file exists. You should delete it", -1, -1 ,dir.getPath());
         }
+    }
+
+    public static boolean isDirectoryValid(File dir) {
+        directoryIsNotEmpty(dir);
+        directoryHasOnlyCsvFiles(dir);
+        resultFileExists(dir);
+        return ErrorNotificator.getInstance().showErrorsIfExist();
     }
 
 }

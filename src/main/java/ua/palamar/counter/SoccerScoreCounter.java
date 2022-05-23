@@ -3,29 +3,21 @@ package ua.palamar.counter;
 import ua.palamar.data.DataValidator;
 import ua.palamar.parser.DataParser;
 
+import java.io.File;
+
 public class SoccerScoreCounter implements ScoreCounter {
 
-    private final DataValidator dataValidator;
-
-    public SoccerScoreCounter(DataValidator dataValidator) {
-        this.dataValidator = dataValidator;
-    }
-
     @Override
-    public int countTotalScore(String team, DataParser dataParser) {
+    public int countTotalScore(String team, DataParser dataParser, int lineNumber, File file) {
         int totalScore = 0;
         String matchOutcomesLine = dataParser.parseMatchOutcomesLine(team);
         String[] matchOutcomes = getMatchOutcomes(matchOutcomesLine);
 
-        dataValidator.idEnoughNumberOfMatchOutcomes(matchOutcomes.length);
 
         for (String matchOutcome : matchOutcomes) {
 
-            dataValidator.matchOutcomeIsNotEmpty(matchOutcome);
-            dataValidator.isMatchOutcomeCorrect(matchOutcome);
-
             String[] temp = matchOutcome.split(":");
-            totalScore += determineScore(temp, dataParser);
+            totalScore += determineScore(temp);
         }
 
         return totalScore;
@@ -35,11 +27,9 @@ public class SoccerScoreCounter implements ScoreCounter {
         return matchOutcomesLine.split(",");
     }
 
-    public int determineScore(String[] matchOutcome, DataParser dataParser) {
-        int goalsScored = dataParser.parseInteger(matchOutcome[0]);
-        int goalsMissed = dataParser.parseInteger(matchOutcome[1]);
-
-        dataValidator.isScoreValid(goalsScored, goalsMissed);
+    public int determineScore(String[] matchOutcome) {
+        int goalsScored = Integer.parseInt(matchOutcome[0]);
+        int goalsMissed = Integer.parseInt(matchOutcome[1]);
 
         if (goalsScored > goalsMissed) {
             return 3;

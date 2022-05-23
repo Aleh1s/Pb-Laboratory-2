@@ -6,6 +6,6 @@ import java.io.File;
 
 public interface TableRepository {
 
-    String[] getTeamsFromTable(File file, DataParser dataParser);
+    String[] getTeamsFromTable(File file);
     void saveTable(File dir, String table);
 }

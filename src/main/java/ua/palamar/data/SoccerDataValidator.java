@@ -1,59 +1,86 @@
 package ua.palamar.data;
 
+import ua.palamar.notificator.ErrorNotificator;
+import ua.palamar.parser.DataParser;
+
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SoccerDataValidator implements DataValidator {
-    @Override
-    public void idEnoughNumberOfMatchOutcomes(int length) {
-        if (length != 10) {
-            throw new RuntimeException(
-                    String.format("Invalid data exception. Expected 10 match outcomes but actually %d", length)
-            );
-        }
+
+    private final DataParser dataParser;
+
+    public SoccerDataValidator(DataParser dataParser) {
+        this.dataParser = dataParser;
     }
 
-    @Override
-    public void matchOutcomeIsNotEmpty(String str) {
-        if (str.equals("")) {
-            throw new RuntimeException(
-                    "Invalid data exception. Match outcome can not be empty"
-            );
-        }
-    }
+    public void matchOutcomesValidator(String teamData, int row, File file) {
+        String teamName = dataParser.parseName(teamData);
+        String matchOutcomesLine = dataParser.parseMatchOutcomesLine(teamData);
+        String[] matchOutcomes = matchOutcomesLine.split(",");
 
-    @Override
-    public void isMatchOutcomeCorrect(String srt) {
-        int delimiterIndex = srt.indexOf(":");
-        if (delimiterIndex != -1) {
-            String beforeDelimiter = srt.substring(0, delimiterIndex);
-            String afterDelimiter = srt.substring(delimiterIndex + 1);
+        isTeamNameValid(teamName, row, file);
+        isMatchOutcomesEnough(matchOutcomes.length, file, row);
 
-            if (beforeDelimiter.equals("") || afterDelimiter.equals("")) {
-                throw new RuntimeException(
-                        String.format("Invalid data exception. Match outcome can not contain empty score %s", srt)
-                );
-
+        for (int i = 0; i < matchOutcomes.length; i++) {
+            matchOutcomeIsNotEmpty(matchOutcomes[i], row, i, file);
+            boolean matchOutcomeCorrect = isMatchOutcomeCorrect(matchOutcomes[i], row, i, file);
+            if (matchOutcomeCorrect) {
+                isScoreValid(matchOutcomes[i], row, i, file);
             }
-        } else {
-            throw new RuntimeException(
-                    String.format(
-                            "Invalid data exception. Expected delimiter is ':' but actually %s", srt
-                    )
-            );
         }
     }
 
-    @Override
-    public void isScoreValid(int goalsScored, int goalsMissed) {
+    private void isMatchOutcomesEnough(int length, File file, int row) {
+        if (length != 10) {
+            ErrorNotificator.getInstance().addError("Not enough match outcomes", row + 1, -1, file.getName());
+        }
+    }
+
+    private void matchOutcomeIsNotEmpty(String matchOutcome, int row, int col, File file) {
+        if (matchOutcome.equals("")) {
+            ErrorNotificator.getInstance().addError("Match outcome can not be empty", row + 1, col + 1, file.getName());
+        }
+    }
+
+    private boolean isMatchOutcomeCorrect(String matchOutcome, int row, int col, File file) {
+        if (!matchOutcome.contains(":")) {
+            ErrorNotificator.getInstance().addError("Can not find delimiter ':'", row + 1, col + 1, file.getName());
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile("\\b\\d+:\\d+\\b");
+        Matcher matcher = pattern.matcher(matchOutcome);
+
+        if (!matcher.matches()) {
+            ErrorNotificator.getInstance().addError("Match outcome format is invalid. Try to make like this 3:2", row + 1, col + 1, file.getName());
+            return false;
+        }
+        return true;
+    }
+
+    public void isScoreValid(String matchOutcome, int row, int col, File file) {
+        int goalsScored = Integer.parseInt(matchOutcome.split(":")[0]);
+        int goalsMissed = Integer.parseInt(matchOutcome.split(":")[1]);
+
         if (goalsScored < 0 || goalsMissed < 0) {
-            throw new RuntimeException("Invalid data exception. Score can not be negative");
+            ErrorNotificator.getInstance().addError("Score can not be negative", row + 1, col + 1, file.getName());
+        }
+    }
+
+    public void isTeamNameValid(String str, int row, File file) {
+        if (str.equals("")) {
+            ErrorNotificator.getInstance().addError(
+                    "Team name can not be empty", row + 1, 0, file.getName()
+            );
         }
     }
 
     @Override
-    public void isTeamNameValid(String str) {
-        if (str == null || str.equals("")) {
-            throw new RuntimeException(
-                    "Team name can not be empty or null"
-            );
+    public void isDataValid(String[] teams, File file) {
+        for (int i = 0; i < teams.length; i++) {
+            matchOutcomesValidator(teams[i], i, file);
         }
     }
 }

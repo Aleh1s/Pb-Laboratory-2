@@ -1,19 +1,23 @@
 package ua.palamar.repository;
 
-import ua.palamar.file.FileValidator;
-import ua.palamar.parser.DataParser;
+import ua.palamar.notificator.ErrorNotificator;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SoccerTableRepository implements TableRepository {
 
-
     @Override
-    public String[] getTeamsFromTable(File file, DataParser dataParser) {
+    public String[] getTeamsFromTable(File file) {
         String[] teams;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            int size = countTeams(reader.readLine(), dataParser);
+            int size = countTeams(reader.readLine(), file);
+
+            if (size == -1) {
+                return null;
+            }
 
             teams = new String[size];
             for (int i = 0; i < size; i++) {
@@ -39,8 +43,16 @@ public class SoccerTableRepository implements TableRepository {
         }
     }
 
-    public int countTeams(String row, DataParser dataParser) {
-        return dataParser.parseInteger(row);
+    public int countTeams(String row, File file) {
+        Pattern pattern = Pattern.compile("\\b\\d+\\b");
+        Matcher matcher = pattern.matcher(row);
+
+        if (!matcher.matches()) {
+            ErrorNotificator.getInstance().addError("Number of teams is invalid", 0 ,0, file.getName());
+            return -1;
+        }
+
+        return Integer.parseInt(row);
     }
 
     public File createResultFile(File dir) {

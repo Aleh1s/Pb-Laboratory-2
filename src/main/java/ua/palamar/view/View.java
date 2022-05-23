@@ -9,6 +9,7 @@ import ua.palamar.service.SoccerTableService;
 import ua.palamar.service.TableService;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class View {
@@ -30,46 +31,55 @@ public class View {
         System.out.println(TITLE);
     }
 
-    public void setDirectory() {
+    public int setDirectory() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Write a directory path: ");
 
-        File dir = new File(scanner.nextLine());
+        System.out.println("Write a directory path or -1 if you want to close program: ");
+        String input = scanner.nextLine();
+
+        if (Objects.equals(input, "-1")) {
+            return -1;
+        }
+
+        File dir = new File(input);
+
+        if (!dir.exists()) {
+            System.err.println("Directory does not exist. Try to change path.");
+            return 0;
+        }
 
         this.dir = dir;
+        return 1;
     }
 
-    public void executeTableExporting() {
-        DataValidator dataValidator = new SoccerDataValidator();
-        TableService tableService = new SoccerTableService(
-                this.dir,
-                new SoccerTableRepository(),
-                new SoccerDataParser(
+    public void exportTable() {
+        SoccerDataParser dataParser = new SoccerDataParser();
+        DataValidator dataValidator = new SoccerDataValidator(dataParser);
+
+        while(true) {
+            int statusCode = setDirectory();
+
+            if (statusCode == -1) break;
+
+            else if (statusCode == 1){
+                TableService tableService = new SoccerTableService(
+                        this.dir,
+                        new SoccerTableRepository(),
+                        dataParser,
+                        new SoccerScoreCounter(),
                         dataValidator
-                ),
-                new SoccerScoreCounter(
-                        dataValidator
-                )
-        );
+                );
 
-        tableService.exportResultTable();
-    }
+                boolean failedToExecute = !tableService.exportResultTable();
 
-    public void startExecuting() {
-        Thread thread = new Thread(this::executeTableExporting);
-        thread.start();
+                if (failedToExecute) System.err.println("Check your files and make changes in regard to errors");
 
-        do {
-
-            ProgressBar.refreshBar();
-
-            try {
-                thread.join(250);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                else {
+                    displayAbsolutePathToResultFile();
+                    break;
+                }
             }
-
-        } while (thread.isAlive());
+        }
     }
 
     public void displayAbsolutePathToResultFile() {

@@ -1,10 +1,7 @@
 package ua.palamar.data;
 
-public interface DataValidator {
+import java.io.File;
 
-    void idEnoughNumberOfMatchOutcomes(int length);
-    void matchOutcomeIsNotEmpty(String str);
-    void isMatchOutcomeCorrect(String srt);
-    void isScoreValid(int goalsScored, int goalsMissed);
-    void isTeamNameValid(String str);
+public interface DataValidator {
+    void isDataValid(String[] teams, File file);
 }
