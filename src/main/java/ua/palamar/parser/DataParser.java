@@ -1,12 +1,14 @@
 package ua.palamar.parser;
 
-import java.io.File;
+public class DataParser {
 
-public interface DataParser {
+    public static String parseName(String unparsedTeam) {
+        return unparsedTeam.substring(0, unparsedTeam.indexOf(","));
+    }
 
-    String parseName(String team);
-
-    String parseMatchOutcomesLine(String team);
-
+    public static String[] parseMatchOutcomes(String unparsedTeam) {
+        String matchOutcomeLine = unparsedTeam.substring(unparsedTeam.indexOf(',') + 1);
+        return matchOutcomeLine.split(",");
+    }
 
 }

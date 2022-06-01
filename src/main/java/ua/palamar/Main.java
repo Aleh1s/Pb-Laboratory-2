@@ -1,11 +1,9 @@
 package ua.palamar;
-
-import ua.palamar.view.View;
-
 public class Main {
     public static void main(String[] args) {
-        View view = new View();
-        View.displayTitle();
-        view.exportTable();
+        Wrapper wrapper = new Wrapper();
+        Wrapper.showTitle();
+        wrapper.setDirectoryPath();
+        wrapper.exportTable();
     }
 }
